@@ -1,17 +1,20 @@
-//
-//  BeeAyyApp.swift
-//  BeeAyy
-//
-//  Created by Darrell Ng on 10/4/26.
-//
-
 import SwiftUI
+import GoogleSignIn
 
 @main
 struct BeeAyyApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
+	@State private var auth = AuthViewModel.shared
+	
+	var body: some Scene {
+		WindowGroup {
+			MainView()
+				.environment(auth)
+				.onOpenURL { url in
+					GIDSignIn.sharedInstance.handle(url)
+				}
+				.onAppear {
+					auth.checkUser()
+				}
+		}
+	}
 }
